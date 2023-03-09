@@ -1,0 +1,189 @@
+
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Adventure Game </title>
+    <script src="blockly_compressed.js"></script>
+    <script src="blocks_compressed.js"></script>
+    <script src="javascript_compressed.js"></script>
+    <script src="en.js"></script>
+    <script src="blocks.js"></script>
+    <script src="generator_stub.js"></script>
+    <script src="level2.js"></script>
+    <script src="minigames.js"></script>
+    
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+    
+    <style>
+      #container{
+      position: relative;
+      width: 200px;
+      height: 200px;
+  }
+  #main_image{
+      width: 100%;
+      height: 100%;
+      background: blue;
+  }
+  #overlay_image{
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background: red;
+  }
+      body {
+        background-color: #fff;
+        font-family: sans-serif;
+      }
+      h1 {
+        font-weight: normal;
+        font-size: 140%;
+      }
+      body {
+          display: flex;
+          margin: 0;
+          
+      }
+      section {
+          display: inline-block; 
+          width: 50%; 
+          height: 100vh; 
+          overflow-y: auto; 
+          font-size: 10;
+          word-wrap: break-word;
+      }
+      section:nth-child(1) {
+          background-color: yellow;
+      }
+      section:nth-child(2) {
+          background-color: beige;
+      }
+
+      .maker {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    height: 100px;
+    width: 500px;
+  }
+
+  .maker > div {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .button {
+    width: 200px;
+    height: 150px;
+    color: white;
+    font-size: 3em;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 140px;
+  }
+ 
+      #game {
+        box-shadow: 10px 10px 15px black;
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+    </style>
+  </head>
+  <body>
+    <section>
+      <div id="blocklyDiv" style="height: 700px; width:auto;"></div>
+    </section>
+  
+    <section>
+      <div style = "position: relative; top:0; left:0">
+          <img id = 'bg' src = './assets/level2.png' style = 'position: relative; top:0; left:0;' />
+          <img id = 'memory' src = './assets/Memory.png'; style = "display: none; position:absolute; left:0px; top:0px;">
+          <img id = 'rocket' src = './assets/BG.png'; style = "position:absolute; left:50px; top:40px; display: block;" width="30", height="50";/>
+          <img id = 'rocket2' src = './assets/BGfire.png'; style = "display: none; position: absolute; left: 40px; top: 250px;" , width="70", height="60";/>
+          <img id = 'memCovered' src = './assets/memCovered.png'; style = "display: none; position:absolute; left:0px; top:0px;">
+          <img id = 'mem1' src = './assets/mem1.PNG'; style = "display: none; position:absolute; left: 30px; top: 85px; width: 110px;">
+          <img id = 'mem2' src = './assets/mem2.PNG'; style = "display: none; position:absolute; left: 145px; top: 85px; width: 105px;">
+          <img id = 'mem3' src = './assets/mem3.PNG'; style = "display: none; position:absolute; left: 250px; top: 85px; width: 125px;">
+          <img id = 'mem4' src = './assets/mem1.PNG'; style = "display: none; position:absolute; left: 145px; top: 210px; width: 110px;">
+          <img id = 'mem5' src = './assets/mem2.PNG'; style = "display: none; position:absolute; left: 30px; top: 210px; width: 110px;">
+          <img id = 'mem6' src = './assets/mem3.PNG'; style = "display: none; position:absolute; left: 250px; top: 213px; width: 125px;">
+      </div>
+   
+
+        <div>
+          <button id = 'b1' style = "position:relative; left : 10px; top: 40px " onclick="showCode()">Show Code</button>
+          <button style = "position:relative; left : 20px; top: 40px " onclick="runCode()">Run</button>
+          <button style = "position:relative; left : 30px; top: 40px " onclick="reset()">Reset</button>
+        </div>      
+        </section>
+
+      <audio id= 'win'>
+        <source  src="assets/winning.mp3" type="audio/mpeg">
+      </audio>
+      <audio id= 'lose'>
+        <source  src="assets/fail.mp3" type="audio/mpeg">
+      </audio>
+      <audio id= 'miniwin'>
+        <source  src="assets/minwin.mp3" type="audio/mpeg">
+      </audio>
+      <audio id= 'minigame'>
+        <source  src="assets/minigame.mp3" type="audio/mpeg">
+      </audio>
+      <audio id= 'taskwin'>
+        <source  src="assets/taskwin.wav" type="audio/mpeg">
+      </audio>
+      <audio id= 'fire'>
+        <source  src="assets/fire.wav" type="audio/mpeg">
+      </audio>
+
+    <xml id="toolbox" style="display: none">
+      <category name="Movement Blocks" colour= "180">
+        <block type="l2_main"></block>
+        <block type="move_fblock"></block>
+        <block type="move_dblock"></block>
+        <block type="compare_block"></block>
+      </category>
+      <category name="Game Blocks" colour= "180">
+        <block type="mem_block"></block>
+      </category>
+   
+      </category>
+      
+    </xml>
+
+
+    <script>    
+      var demoWorkspace = Blockly.inject('blocklyDiv',
+          {toolbox: document.getElementById('toolbox')});
+            
+      function showCode() {
+        var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+      console.log(code);
+        alert(code);
+      }
+
+
+
+      function runCode() {
+        window.LoopTrap = 1000;
+        Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
+        var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+        Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+        try {
+          eval(code);
+          animate();
+        } catch (e) {
+          alert(e);
+        }
+      }
+
+    </script>
+  </body>
+  </html>
